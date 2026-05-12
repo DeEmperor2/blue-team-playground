@@ -1,3 +1,147 @@
 # Splunk Labs & Notes
 
 This folder contains Splunk fundamentals, SPL queries, and SOC-style analysis.
+### week 4 Splunk intro
+Splunk Fundamentals – Theory & Query Design (Week Update)
+This week focused on building a solid theoretical foundation in Splunk and SOC log analysis, with emphasis on understanding how analysts explore, filter, and interpret log data during investigations.
+I studied the core structure of Splunk, including:
+How data is stored using indexes
+How logs are associated with hosts and sources
+How the Search Processing Language (SPL) is used to transform raw logs into actionable insights
+Key SPL Concepts Practiced
+Data Enumeration
+Explored all available logs to understand what data sources are present before analysis.
+Log Volume Analysis
+Identified high-volume log sources to detect abnormal behavior or misconfigured systems.
+Authentication Failure Detection
+Designed queries to surface failed login attempts, useful for identifying brute-force attacks or unauthorized access attempts.
+Time-Based Analysis
+Used time-series logic to detect traffic spikes and unusual activity patterns over time.
+Although I was unable to complete hands-on labs due to environment and installation constraints, I focused on understanding SOC workflows, detection logic, and how Splunk integrates with tools like Wireshark for deeper packet-level analysis.
+This phase strengthened my ability to reason like a SOC analyst — knowing what to look for, why it matters, and how to escalate investigations once anomalies are identified.
+
+## Week 5 – Splunk Installation Attempt
+
+### Objective
+Install Splunk Enterprise locally to begin hands-on log analysis and lab configuration.
+
+### Environment
+- Operating System: Windows
+- Installer: Splunk Enterprise (Windows x64 MSI)
+- Source: Official Splunk website
+
+### Process
+1. Downloaded the Splunk Enterprise MSI installer.
+2. Launched the installer.
+3. Monitored system performance using Task Manager during setup.
+
+### Issue Encountered
+The installation stalled at the "Preparing to install" phase and did not progress.
+
+### Observations
+- CPU usage reached 100% during installation.
+- Memory usage exceeded 80%.
+- Disk activity was active but installation did not advance.
+- Windows Security indicated detected threats during the process.
+
+### Troubleshooting Steps
+- Reviewed system resource utilization in Task Manager.
+- Restarted the system to clear potential installer lock.
+- Considered running installation via elevated Command Prompt (msiexec).
+- Planned temporary disabling of real-time protection during installation.
+
+### Outcome
+Installation did not complete successfully. The likely causes include high system resource utilization and possible security interference.
+
+### Next Steps
+- Perform clean installation using administrative privileges.
+- Temporarily disable Windows Defender during installation.
+- Reattempt setup and monitor system performance.
+- Explore alternative deployment options if necessary.
+
+### Evidence
+
+![Installation Stall](images/splunk_install_stall.png)https://github.com/DeEmperor2/network-traffic-analysis-labs/blob/main/IMG_20260218_203228_029.jpg
+
+![Task Manager CPU Usage](images/task_manager_cpu.png)https://github.com/DeEmperor2/network-traffic-analysis-labs/blob/main/IMG-20260202-WA0033.jpg
+
+
+
+### Week 6 — Splunk Enterprise Deployment & Internal Log Analysis
+
+**Objective:**
+Continue building SOC skills by mastering Splunk Enterprise on Windows and performing internal log analysis.
+
+### Tasks Completed:
+
+1. Installed Splunk Enterprise v10.2 on Windows x64.
+2. Verified Splunkd service is running.
+3. Accessed the web interface at http://127.0.0.1:8000.
+4. Executed SPL queries:
+   - index=_internal | head 20
+   - index=_internal | stats count by sourcetype
+   - index=_internal log_level=ERROR
+5. Observed 5k+ internal events, including ERROR logs.
+6. Captured timeline visualizations and statistics tables.
+7. Screenshots taken:
+   - Home dashboard ~ 
+   - _internal logs timeline
+   - SPL stats by sourcetype
+   - Splunkd service running
+   - Error log query results
+
+### Reflection:
+
+- Windows MSI install can freeze; manual start via 'splunk start' may be required.
+- _internal logs provide immediate data for analysis and portfolio proof.
+- Learned to navigate Splunk’s Web UI and execute SPL for SOC-style monitoring.
+
+### Next Week Plan:
+
+- Enable and ingest Windows Event Logs locally.
+- Explore Security EventCode queries (e.g., 4625 failed logons).
+- Capture analytical dashboards for portfolio enhancement.
+
+### Week 7 — Internal Log Threat Hunting in Splunk
+
+Objective:
+Analyze internal logs to identify error patterns and noisy components, practicing SOC-style monitoring.
+
+### Tasks Completed:
+
+1. Opened Search & Reporting in Splunk Web.
+2. Set Time Range: Last 24 hours.
+3. Ran SPL query to view log level distribution:
+   index=_internal | stats count by log_level | sort - count
+
+   Result: INFO logs dominated (97,706 events).
+
+4. Identified the most error-prone components:
+   index=_internal log_level=ERROR | stats count by component | sort - count
+
+   Result: [Top component name here] had the highest errors.
+
+5. Visualized error trends over time:
+   index=_internal log_level=ERROR | timechart count
+
+   Result: Line chart showing error spikes and patterns over time.
+
+### Screenshots Included:
+
+1. Query and results for log level distribution.
+2. Query and results showing error counts by component.
+3. Timechart visualization of errors over time.
+
+### Reflection:
+
+- INFO logs dominate internal logs, which is expected in normal operations.
+- ERROR logs help identify components that may require attention or troubleshooting.
+- Using SPL queries and visualizations provides a practical introduction to SOC-style monitoring and log analysis.
+
+### Next Week Plan:
+
+- Install Splunk Add-on for Microsoft Windows.
+- Enable ingestion of Windows Event Logs (Application, System, Security).
+- Run security-related EventCode queries such as 4625 (failed logons) and 4624 (successful logons).
+- Capture dashboards and visualizations for further portfolio documentation.
+
